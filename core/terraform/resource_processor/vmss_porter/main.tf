@@ -50,6 +50,26 @@ resource "azurerm_user_assigned_identity" "vmss_msi" {
   lifecycle { ignore_changes = [tags] }
 }
 
+data "azuread_application_published_app_ids" "well_known" {}
+
+# resource "azuread_service_principal" "vmss_spn" {
+#   application_id = azurerm_user_assigned_identity.vmss_msi.client_id
+#   use_existing = true
+# }
+
+# grant the MSI access to create Fabric workspaces + read capacities
+resource "azuread_app_role_assignment" "fabric_workspace" {
+  app_role_id         = "76e2ebd5-0dfb-4a5b-93c7-ed89e0362834"
+  principal_object_id = "d17d3f98-2a11-4ffc-8a3e-63e705f5e28f"
+  resource_object_id  = "8ee6a7be-a93a-4986-bcae-aa6ef7996b60"
+}
+resource "azuread_app_role_assignment" "fabric_capacity" {
+  app_role_id         = "445002fb-a6f2-4dc1-a81e-4254a111cd29"
+  principal_object_id = "d17d3f98-2a11-4ffc-8a3e-63e705f5e28f"
+  resource_object_id  = "8ee6a7be-a93a-4986-bcae-aa6ef7996b60"
+}
+
+
 resource "azurerm_linux_virtual_machine_scale_set" "vm_linux" {
   name                            = "vmss-rp-porter-${var.tre_id}"
   location                        = var.location

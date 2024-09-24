@@ -21,6 +21,10 @@ terraform {
       source  = "Azure/azapi"
       version = "~> 1.13.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.15.0"
+    }
   }
 
   backend "azurerm" {}
@@ -28,6 +32,10 @@ terraform {
 
 provider "azapi" {
   use_msi = var.arm_use_msi
+}
+
+provider "azuread" {
+  tenant_id = data.azurerm_subscription.current.tenant_id
 }
 
 provider "azurerm" {
