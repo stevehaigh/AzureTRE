@@ -55,13 +55,12 @@ resource "azurerm_firewall_policy_rule_collection_group" "core" {
     action   = "Allow"
 
     rule {
-      name = "azure-services"
+      name = "azure-services-for-api"
       protocols = [
         "TCP"
       ]
       destination_addresses = [
         "AzureActiveDirectory",
-        "AzureContainerRegistry",
         "AzureResourceManager"
       ]
       destination_ports = [
