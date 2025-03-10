@@ -19,20 +19,6 @@ retry_with_backoff() {
 }
 
 init_terraform() {
-  # shellcheck disable=SC2154
-  cat > bootstrap_backend.tf <<BOOTSTRAP_BACKEND
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "$TF_VAR_mgmt_resource_group_name"
-    storage_account_name = "$TF_VAR_mgmt_storage_account_name"
-    container_name       = "$TF_VAR_terraform_state_container_name"
-    key                  = "bootstrap.tfstate"
-    use_azuread_auth     = true
-    use_oidc             = true
-  }
-}
-BOOTSTRAP_BACKEND
-
   terraform_output=$(terraform init -input=false -reconfigure 2>&1)
   echo "Terraform command output:"
   echo "$terraform_output"
@@ -133,6 +119,20 @@ for container in "${containers[@]}"; do
 done
 
 # Set up Terraform
+
+# shellcheck disable=SC2154
+cat > bootstrap_backend.tf <<BOOTSTRAP_BACKEND
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "$TF_VAR_mgmt_resource_group_name"
+    storage_account_name = "$TF_VAR_mgmt_storage_account_name"
+    container_name       = "$TF_VAR_terraform_state_container_name"
+    key                  = "bootstrap.tfstate"
+    use_azuread_auth     = true
+    use_oidc             = true
+  }
+}
+BOOTSTRAP_BACKEND
 echo -e "\n\e[34m»»» ✨ \e[96mTerraform init\e[0m..."
 # shellcheck disable=SC2154
 if ! retry_with_backoff init_terraform; then
