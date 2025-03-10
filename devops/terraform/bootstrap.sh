@@ -73,7 +73,7 @@ fi
 
 # shellcheck disable=SC1091
 source ../scripts/mgmtstorage_enable_public_access.sh
-
+# check.
 # Grant user blob data contributor permissions
 echo -e "\n\e[34m»»» 🔑 \e[96mGranting Storage Blob Data Contributor role to the current user\e[0m..."
 if [ -n "${ARM_CLIENT_ID:-}" ]; then
