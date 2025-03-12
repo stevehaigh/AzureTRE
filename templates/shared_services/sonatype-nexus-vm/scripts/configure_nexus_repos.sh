@@ -36,7 +36,7 @@ if ! retry_with_backoff wait_for_repos_config; then
   exit 1
 fi
 
-# Function to check if Nexus service is ready.
+# Function to check if Nexus service is ready
 nexus_ready() {
   curl -s http://localhost/service/rest/v1/status -k > /dev/null
 }
