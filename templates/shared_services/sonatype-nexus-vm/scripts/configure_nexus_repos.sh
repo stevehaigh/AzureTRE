@@ -93,7 +93,7 @@ for filename in "$(dirname "${BASH_SOURCE[0]}")"/nexus_repos_config/*.json; do
       exit 1
     fi
 done
-
+# check
 echo 'Configuring realms...'
 status_code=$(curl -iu admin:"$1" -XPUT \
   'http://localhost/service/rest/v1/security/realms/active' \
